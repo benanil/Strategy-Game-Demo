@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEditor;
+﻿
 using UnityEngine;
 using NaughtyAttributes;
 
@@ -13,46 +12,36 @@ namespace PanteonGames
         [Expandable] // only asset for visualizing scriptable object on inspector(editor only attribute)
         public BuildingDataSC data;
 
-        public Vector2 cellAspectRatio;
+        public float HealthPoint = 10;
 
-        [ContextMenu("Test")]
-        public void Test()
+        public void AddDamage(float damage)
         {
-            Initialize();
-        }
+            HealthPoint -= damage;
 
-        private void Start()
-        {
-            Initialize();
-        }
-
-        public void Initialize()
-        {
-            Vector2 spriteSize = data.sprite.rect.size;
-            Vector2 desiredScale = data.CellSize * (int)CellPixelScale; // ie: desiredScale = 4x4 * 32 = 256x256
-            cellAspectRatio = desiredScale / spriteSize;
-
-            Debug.Log("cellAspectRatio" + cellAspectRatio);
-            Debug.Log("desiredScale " + desiredScale);
-
-            transform.localScale = Vector3.one * cellAspectRatio;
-            cellAspectRatio /= 2;
-        }
-    }
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(Building))]
-    public class BuildingEditor : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
-
-            if (GUILayout.Button("Initialize"))
+            if (HealthPoint <= 0)
             {
-                ((Building)target).Initialize();
+                Explode();
             }
         }
+
+        public void Explode()
+        {
+            // todo add sound and particle
+            Destroy(this);
+        }
+
+        // we are rescaling the gameobject here because our sprites are not exact size that we want
+        // eg. I have 236x236 image I want to round it to 256x256(because every cell is 32pixel)
+        // so I scale it up here
+        public void Initialize(BuildingDataSC _data)
+        {
+            data = _data;
+            HealthPoint = data.healthPoint;
+            Vector2 spriteSize = data.sprite.rect.size;
+            Vector2 desiredScale = data.CellSize * (int)CellPixelScale; // ie: desiredScale = 4x4 * 32 = 256x256
+            Vector2 cellAspectRatio = desiredScale / spriteSize;
+
+            transform.localScale = Vector3.one * cellAspectRatio;
+        }
     }
-#endif
 }
