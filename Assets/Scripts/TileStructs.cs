@@ -14,12 +14,13 @@ namespace PanteonGames
         public Vector2 minPoint, maxPoint;
         public MinMaxSelectArea(Vector2 _minPoint, Vector2 _maxPoint)
         {
-            if (_minPoint.magnitude > _maxPoint.magnitude)
-            {
-                Helper.Swap(ref _minPoint, ref _maxPoint);
-            }
-            minPoint = _minPoint;
-            maxPoint = _maxPoint;
+            minPoint = new Vector2();
+            minPoint.x = _minPoint.x < _maxPoint.x ? _minPoint.x : _maxPoint.x;
+            minPoint.y = _minPoint.y < _maxPoint.y ? _minPoint.y : _maxPoint.y;
+
+            maxPoint = new Vector2();
+            maxPoint.x = _minPoint.x > _maxPoint.x ? _minPoint.x : _maxPoint.x;
+            maxPoint.y = _minPoint.y > _maxPoint.y ? _minPoint.y : _maxPoint.y;
         }
 
         public bool IsInside(Vector3 point)

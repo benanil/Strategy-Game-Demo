@@ -75,7 +75,7 @@ namespace PanteonGames
         {
             State = SoldierState.walking;
 
-            Vector2Int startGridPos = TileSystem.WorldPositionToGridIndex(transform.position, Vector2Int.one);
+            Vector2Int startGridPos = GetGridIndex();
             List<Vector2Int> pathIndexes = PathfFinding.FindPath(TileSystem.GetTiles(), startGridPos, point);
 
             worldPositions = new Vector3[pathIndexes.Count];
@@ -89,6 +89,11 @@ namespace PanteonGames
             GameManager.instance.ShowFindedPath(worldPositions);
 
             currentIndex = 0;
+        }
+
+        public Vector2Int GetGridIndex()
+        {
+            return TileSystem.WorldPositionToGridIndex(transform.position, Vector2Int.one);
         }
 
         public void AddDamage(float value)

@@ -144,7 +144,10 @@ namespace PanteonGames
                 // if mouse up end dragging
                 if (dragStarted && Input.GetMouseButtonUp(0))
                 {
-                    SellectSoldiers(new MinMaxSelectArea(dragStartPos, mousePos));
+                    if (SoldiersSelected(new MinMaxSelectArea(dragStartPos, mousePos)))
+                    {
+                        State = GameManagerState.movingSoldiers;
+                    }
                     SelectAreaLines.gameObject.SetActive(false);
                     dragStarted = false;
                     draggingTime = 0;
@@ -179,10 +182,7 @@ namespace PanteonGames
                         SetState(GameManagerState.none);
                         CurrentBuilding = null; // this line must came after set state otherwise null referance exception
                     }
-                    else
-                    {
-                        // todo: add sound and particle place is not empty
-                    }
+                    // else todo: add sound and particle place is not empty
                 }
             }
             else if (State == GameManagerState.movingSoldiers)
@@ -195,16 +195,26 @@ namespace PanteonGames
                 // right click move soldier
                 if (Input.GetMouseButtonDown(1))
                 {
-                    Vector2Int targetIndex = TileSystem.WorldPositionToGridIndex(mousePos, Vector2Int.one);
+                    Vector2Int mouseIndex = TileSystem.WorldPositionToGridIndex(mousePos, Vector2Int.one);
                     if (SelectedSoldiers.Count == 1)
                     {
-                        SelectedSoldiers[0].MoveToPoint(targetIndex);
+                        SelectedSoldiers[0].MoveToPoint(mouseIndex);
                     }
                     else
                     {
+                        Vector3 averagePosition = default;
+                        // find center position of all soldiers
+                        for (int i = 0; i < SelectedSoldiers.Count; ++i) {
+                            averagePosition += SelectedSoldiers[i].transform.position;
+                        }
+                        averagePosition /= SelectedSoldiers.Count;
+                        Vector2Int averageGridIndex = TileSystem.WorldPositionToGridIndex(averagePosition, Vector2Int.one);
+
                         for (int i = 0; i < SelectedSoldiers.Count; i++)
                         {
-
+                            Vector2Int direction = mouseIndex - averageGridIndex;
+                            Vector2Int targetIndex = averageGridIndex + direction + (averageGridIndex - SelectedSoldiers[i].GetGridIndex());
+                            SelectedSoldiers[i].MoveToPoint(targetIndex);
                         }
                     }
                     State = GameManagerState.none;
@@ -212,7 +222,7 @@ namespace PanteonGames
             }
         }
 
-        private void SellectSoldiers(in MinMaxSelectArea area)
+        private bool SoldiersSelected(in MinMaxSelectArea area)
         {
             SelectedSoldiers.Clear();
             foreach (var soldier in soldiers)
@@ -222,6 +232,7 @@ namespace PanteonGames
                     SelectedSoldiers.Add(soldier);
                 }
             }
+            return SelectedSoldiers.Count > 0;
         }
 
         public void ShowFindedPath(Vector3[] points)
