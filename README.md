@@ -17,8 +17,8 @@ DONE		create mini textures of soldiers
 DONE add ability to chose soldiers
 DONE add ability to move soldiers(path finding)
 
-# create enemies (maybe aliens)
-# add ability to attack enemies
+ create enemies (maybe aliens)
+ add ability to attack enemies
 
-# add power plants ability to earn money
-# add money and money earning from power plant
+ add power plants ability to earn money
+ add money and money earning from power plant
