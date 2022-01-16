@@ -1,24 +1,24 @@
 # Strategy-Game-Demo
  for senior assignment
 
-DONE world position to grid position snapping\n
-DONE create tile struct and make 2d array of it\n
-DONE control a tile point placeable or not\n
+- [x]  world position to grid position snapping
+- [x]  create tile struct and make 2d array of it
+- [x]  control a tile point placeable or not
 
-DONE 	create UI left side (Production Menu)\n
-DONE		automaticly place productions to UI\n
-DONE		drag drop from production menu\n
+- [x]  	create UI left side (Production Menu)
+- [x] 		automaticly place productions to UI
+- [x] 		drag drop from production menu
 
-DONE create information menu\n
-DONE add ability to move around map\n
-DONE add barracks ability to produce soldiers\n
-DONE		create mini textures of soldiers\n
+- [x]  create information menu
+- [x]  add ability to move around map
+- [x]  add barracks ability to produce soldiers
+- [x] 		create mini textures of soldiers
 
-DONE add ability to chose soldiers\n
-DONE add ability to move soldiers(path finding)\n
+- [x]  add ability to chose soldiers
+- [x]  add ability to move soldiers(path finding)
 
- create enemies (maybe aliens)\n
- add ability to attack enemies\n
+- [0] create enemies (maybe aliens)
+- [0] add ability to attack enemies
 
- add power plants ability to earn money\n
- add money and money earning from power plant\n
+- [0] add power plants ability to earn money
+- [0] add money and money earning from power plant
