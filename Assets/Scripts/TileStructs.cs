@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace PanteonGames
 {
@@ -6,6 +7,37 @@ namespace PanteonGames
     {
         public bool isPlaceable;
         public bool IsWalkable() => isPlaceable;
+    }
+
+    public struct MinMaxSelectArea
+    {
+        public Vector2 minPoint, maxPoint;
+        public MinMaxSelectArea(Vector2 _minPoint, Vector2 _maxPoint)
+        {
+            if (_minPoint.magnitude > _maxPoint.magnitude)
+            {
+                Helper.Swap(ref _minPoint, ref _maxPoint);
+            }
+            minPoint = _minPoint;
+            maxPoint = _maxPoint;
+        }
+
+        public bool IsInside(Vector3 point)
+        {
+            return point.x <= maxPoint.x && point.y <= maxPoint.y &&
+                point.x >= minPoint.x && point.y >= minPoint.y ;
+        }
+    }
+
+    public static class Helper
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Swap<T>(ref T lhs, ref T rhs)
+        {
+            T temp = lhs;
+            lhs = rhs;
+            rhs = temp;
+        }
     }
 
     [System.Serializable] // for visualizing this struct in inspector

@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace PanteonGames
 { 
-    
     public class TileSystem : MonoBehaviour
     {
+        public static TileSystem instance;
         public const float CellPixelScale = 32;
         
         public Vector3 TileStartPos;
@@ -34,12 +34,18 @@ namespace PanteonGames
 
         private void Awake()
         {
+            instance = this;
             tiles = new Tile[TileScale.x, TileScale.y];
             MainGridVisualizer.SetVisuality(false);
             // set all of the tiles placeable 
             for (int x = 0; x < tiles.GetLength(0); ++x)
                 for (int y = 0; y < tiles.GetLength(1); ++y)
                     tiles[x, y].isPlaceable = true;
+        }
+
+        public Tile[,] GetTiles()
+        {
+            return tiles;
         }
 
         /// <param name="tileScale">width and height of cell ie 4x4</param>
@@ -69,7 +75,7 @@ namespace PanteonGames
         // returns integer position on the 2d grid
         public Vector2Int GridPositionToArrayIndex(Vector3 worldPos)
         {
-            Vector3 worldToGrid = WorldPositionToGridPosition(worldPos, Vector2Int.one); // we are assuming 1x1 area here
+            Vector3 worldToGrid = WorldPositionToGridPosition(worldPos, Vector2Int.zero); // we are assuming 1x1 area here
             float gridToInt = 1 / cellScale;
             worldToGrid.x *= gridToInt;
             worldToGrid.y *= gridToInt;
@@ -77,6 +83,17 @@ namespace PanteonGames
             Vector2Int result = new Vector2Int(Mathf.RoundToInt(worldToGrid.x), Mathf.RoundToInt(worldToGrid.y));
 
             return result;
+        }
+
+        public Vector3 ArrayIndexToWorldPosition(Vector2Int arrayIndex)
+        {
+            return new Vector3(arrayIndex.x * cellScale, arrayIndex.y * cellScale);
+        }
+
+        public Vector2Int WorldPositionToGridIndex(Vector3 worldPos, Vector2Int buildingArea)
+        {
+            Vector3 gridPosition = WorldPositionToGridPosition(worldPos, buildingArea - Vector2Int.one);
+            return GridPositionToArrayIndex(gridPosition);
         }
 
         // visualize green if grid is placeable
@@ -99,7 +116,7 @@ namespace PanteonGames
             return tiles[arrayIndex.x, arrayIndex.y].IsWalkable();
         }
 
-        // remove from tile placeables
+        // mark as not placeable in tile array
         public void PlaceBuilding(Building building, Vector2Int arrayIndex)
         {
             for (int x = 0; x < building.data.CellSize.x; ++x)
@@ -110,6 +127,19 @@ namespace PanteonGames
                 }
             }
         }
+
+        // mark as placeable in tile array
+        public void RemoveBuilding(Building building, Vector2Int arrayIndex)
+        {
+            for (int x = 0; x < building.data.CellSize.x; ++x)
+            {
+                for (int y = 0; y < building.data.CellSize.y; ++y)
+                {
+                    tiles[arrayIndex.x + x, arrayIndex.y + y].isPlaceable = true;
+                }
+            }
+        }
+
         public void CreateMainGridLines()
         { 
             CreateGridLines(TileScale, TileStartPos, MainGridVisualizer);

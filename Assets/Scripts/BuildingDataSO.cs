@@ -24,5 +24,7 @@ namespace PanteonGames
         public Sprite sprite;
         public string name;
         public string description;
+        // this can be scriptable object
+        public Object initialData;
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace PanteonGames
 {
-    public class BuildingSlot : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
+    public class BuildingSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
     {
         [SerializeField] private Text nameText;
         [SerializeField] private Image image;
@@ -43,12 +43,7 @@ namespace PanteonGames
             }
             SpawnBuilding();
         }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            InformationMenu.instance.SetCurrentBuildingInformation(scriptable);
-        }
-
+        
         public void OnPointerDown(PointerEventData eventData)
         {
             holdingTimeStart = Time.time;
@@ -68,7 +63,7 @@ namespace PanteonGames
                 StopCoroutine(currentCoroutine);
             }
 
-            if (holding && holdDuration > 0.5f)
+            if (holding && holdDuration > 0.25f)
             {
                 SpawnBuilding();
             }
@@ -78,9 +73,10 @@ namespace PanteonGames
             holding = false;
         }
 
+        // spawns building to players hand
         private void SpawnBuilding()
         {
-            if (GameManager.GetCurrentBuilding() == null)
+            if (GameManager.GetCurrentState() != GameManagerState.MovingBuilding)
             {
                 // create new building
                 GameObject newBuildingGO = new GameObject(scriptable.BuildingName);
@@ -88,7 +84,7 @@ namespace PanteonGames
                 Building building = newBuildingGO.AddComponent<Building>();
                 building.Initialize(scriptable);
 
-                GameManager.SetCurrentBuilding(building);
+                GameManager.MoveBuilding(building);
             }
             holding = false;
             

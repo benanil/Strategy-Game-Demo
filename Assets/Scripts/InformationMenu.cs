@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 namespace PanteonGames
 {
+    // this class used as production menu and information menu
+
     public class InformationMenu : MonoBehaviour
     {
         public static InformationMenu instance;
@@ -25,16 +27,14 @@ namespace PanteonGames
             instance = this;
         }
 
+
         public void SetCurrentBuildingInformation(BuildingDataSO buildingSC)
         {
             BuildingName.text = buildingSC.BuildingName;
             BuildingImage.sprite = buildingSC.sprite;
 
             // remove old production infos
-            for (int i = 0; i < CurrentProductions.Length; i++)
-            {
-                CurrentProductions[i].gameObject.SetActive(false);
-            }
+            HideProductionInfos();
 
             // search if already exist in dictionary
             if (productionSlotMap.ContainsKey(buildingSC))
@@ -61,16 +61,20 @@ namespace PanteonGames
             }
         }
 
+        private void HideProductionInfos()
+        {
+            for (int i = 0; i < CurrentProductions.Length; i++)
+            {
+                CurrentProductions[i].gameObject.SetActive(false);
+            }
+        }
+
         // set visuality false
         public void Hide()
         {
             BuildingName.text = string.Empty;
             BuildingImage.sprite = null;
-
-            for (int i = 0; i < CurrentProductions.Length; i++)
-            {
-                Destroy(CurrentProductions[i]);
-            }
+            HideProductionInfos();
         }
 
     }

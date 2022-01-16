@@ -430,9 +430,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MovingBuildingDepth: 0
   TileSystem: {fileID: 275835704}
-  PrewiewLineMaterial: {fileID: 0}
+  PrewiewLineMaterial: {fileID: 2100000, guid: 75b916de8e2b55444b0a128b85ac0f7b, type: 2}
   BuildingsParent: {fileID: 1845177794}
-  testBuildingData: {fileID: 11400000, guid: a1bb646410cf5bc4784bb6510363ad8a, type: 2}
 --- !u!1 &399327326
 GameObject:
   m_ObjectHideFlags: 0
@@ -1844,6 +1843,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1458667870}
   - component: {fileID: 1458667869}
+  - component: {fileID: 1458667871}
+  - component: {fileID: 1458667872}
   m_Layer: 0
   m_Name: Grass Background
   m_TagString: Untagged
@@ -1916,6 +1917,33 @@ Transform:
   m_Father: {fileID: 237123596}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1458667871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458667868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac2ad4fdebeb544f99fc22d950e3ae0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  production: {fileID: 631404987}
+  information: {fileID: 2017323714}
+--- !u!65 &1458667872
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458667868}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 70, y: 60, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1475654524
 GameObject:
   m_ObjectHideFlags: 0
