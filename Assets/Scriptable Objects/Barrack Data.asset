@@ -12,7 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79e5933a7c9f5fc4b8242644926e14f4, type: 3}
   m_Name: Barrack Data
   m_EditorClassIdentifier: 
-  Name: Barrack
-  Description: "a barrack for producing soldiers.\t"
+  BuildingName: Barracks
+  Description: "you can produce soldiers with this\t"
   sprite: {fileID: 21300000, guid: f915c911330ede44a8ab07ecfec08e45, type: 3}
+  productions:
+  - sprite: {fileID: 21300000, guid: 22b6f43f47b719c46a6e97eb28e928f2, type: 3}
+    name: soldier0
+    description: 
+  - sprite: {fileID: 21300000, guid: f3e91c36c8451a8449e730f2dd11e25c, type: 3}
+    name: soldier1
+    description: 
+  - sprite: {fileID: 21300000, guid: f3e91c36c8451a8449e730f2dd11e25c, type: 3}
+    name: soldier1v2
+    description: 
+  healthPoint: 10
   CellSize: {x: 4, y: 4}

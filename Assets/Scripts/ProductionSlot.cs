@@ -1,42 +1,17 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace PanteonGames
 {
-    public class ProductionSlot : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
+    public class ProductionSlot : MonoBehaviour
     {
-        public BuildingDataSC scriptable;
-        public Text nameText;
-        public Image image;
-        float holdStartTime;
+        [SerializeField] private TMPro.TextMeshProUGUI nameText;
+        [SerializeField] private Image image;
 
-        public void Initialize()
+        public void Initialize(ProdutionInfo produtionInfo)
         {
-            image.sprite = scriptable.sprite;
-            nameText.text = scriptable.BuildingName;
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            // todo show information on information menu
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            holdStartTime = Time.time;
-
-            Debug.Log("hold startTime");
-        }
-
-        public void OnPointerUp(PointerEventData eventData)
-        {
-            Debug.Log("hold endTime:" + Time.time);
-
-            if (Time.time - holdStartTime > 1)
-            {
-                // todo spawn item on players hand
-            }
+            image.sprite = produtionInfo.sprite;
+            nameText.text = produtionInfo.name;
         }
     }
 }

@@ -6,8 +6,8 @@ namespace PanteonGames
 {
     public class ProductionMenu : MonoBehaviour
     {
-        [SerializeField] private BuildingDataSC[] allBuildings;
-        [SerializeField] private ProductionSlot slotPrefab;
+        [SerializeField] private BuildingDataSO[] allBuildings;
+        [SerializeField] private BuildingSlot slotPrefab;
         [SerializeField] private Transform slotParent;
 
         private void Start()
@@ -15,7 +15,8 @@ namespace PanteonGames
             // todo spawn all
             for (int i = 0; i < allBuildings.Length; i++)
             {
-                Instantiate(slotPrefab, slotParent); 
+                BuildingSlot slot = Instantiate(slotPrefab, slotParent);
+                slot.Initialize(allBuildings[i]);
             }
         }
     }

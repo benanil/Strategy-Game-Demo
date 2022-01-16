@@ -14,20 +14,26 @@ namespace PanteonGames
     public class GameManager : MonoBehaviour
     {
         static GameManager instance;
-        private const float MovingBuildingDepth = 500;
+        public float MovingBuildingDepth = 500;
 
         public TileSystem TileSystem;
         private GameManagerState State;
 
         private Building CurrentBuilding;
 
+        public Material PrewiewLineMaterial;
+
         // TEMP
         public Transform BuildingsParent;
-        public BuildingDataSC testBuildingData;
+        public BuildingDataSO testBuildingData;
 
-        private void Start()
+        public static Building GetCurrentBuilding() { return instance.CurrentBuilding; }
+
+        private void Awake()
         {
             if (TileSystem == null) { Debug.LogError("please asign tile system!"); }
+            
+            Application.targetFrameRate = 60;
 
             instance = this;
             BuildingsParent = new GameObject("Buildings Parent").transform;
@@ -35,9 +41,16 @@ namespace PanteonGames
 
         public static void SetCurrentBuilding(Building building)
         {
-            instance.CurrentBuilding = building;
-            instance.TileSystem.SetPreviewSize(building.data.CellSize);
-            instance.TileSystem.SetPreviewEnable(true);
+            instance.SetBuildingInternal(building);
+        }
+
+        private void SetBuildingInternal(Building building)
+        { 
+            CurrentBuilding = building;
+            TileSystem.SetPreviewSize(building.data.CellSize);
+            TileSystem.SetPreviewEnable(true);
+            building.transform.SetParent(BuildingsParent);
+            SetState(GameManagerState.MovingBuilding);
         }
 
         private void Update()
@@ -46,7 +59,7 @@ namespace PanteonGames
             {
                 Vector2Int buildingSize = CurrentBuilding.data.CellSize;
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                mousePos.z = MovingBuildingDepth;
+                mousePos.z = -MovingBuildingDepth;
 
                 // we are manipulating mouse position here because we don't want to hold building at pivot position
                 mousePos -= TileSystem.GetBuildingCenterDrection(buildingSize);
@@ -54,7 +67,7 @@ namespace PanteonGames
                 Vector3 gridPosition = TileSystem.WorldPositionToGridPosition(mousePos, buildingSize);
                 TileSystem.SetPreviewPosition(gridPosition);
 
-                CurrentBuilding.transform.position = mousePos;
+                CurrentBuilding.transform.position = gridPosition;
 
                 Vector2Int arrayIndex = TileSystem.GridPositionToArrayIndex(gridPosition); // tile index
                 bool isPlaceable = TileSystem.IsPlacable(arrayIndex, buildingSize);
@@ -66,30 +79,34 @@ namespace PanteonGames
                     if (isPlaceable)
                     {
                         TileSystem.PlaceBuilding(CurrentBuilding, arrayIndex);
-                        CurrentBuilding = null;
                         State = GameManagerState.none;
+                        // todo: sound and particle
+                        SetState(GameManagerState.none);
+                        CurrentBuilding = null; // this line must came after set state otherwise null referance exception
                     }
                     else
                     {
-                        // todo: add sound or particle place is not empty
+                        // todo: add sound and particle place is not empty
                     }
                 }
             }
+        }
 
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                State = State == GameManagerState.MovingBuilding?GameManagerState.none:GameManagerState.MovingBuilding;
-                TileSystem.SetPreviewEnable(State == GameManagerState.MovingBuilding);
-                TileSystem.SetMainGridEnable(State == GameManagerState.MovingBuilding);
-            }
+        private void SetState(GameManagerState state)
+        {
+            this.State = state;
 
-            if (Input.GetKeyDown(KeyCode.F))
+            TileSystem.SetPreviewEnable(State == GameManagerState.MovingBuilding);
+            TileSystem.SetPreviewSize(CurrentBuilding.data.CellSize);
+            TileSystem.SetMainGridEnable(State == GameManagerState.MovingBuilding);
+            
+            switch (state)
             {
-                var newBuildingGO = new GameObject("building test");
-                newBuildingGO.transform.SetParent(BuildingsParent);
-                var building = newBuildingGO.AddComponent<Building>();
-                building.Initialize(testBuildingData);
+                case GameManagerState.MovingBuilding: break;
+                case GameManagerState.none:           break;
+                default: throw new System.Exception("invaild gamemanager state!");
             }
         }
+
     }
 }

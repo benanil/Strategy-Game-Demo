@@ -21,25 +21,25 @@ namespace PanteonGames
 
         public float cellScale = 1.0f;
         
-        public Transform testObj;
-
         /// tile is struct that contains only isplacable bool
         private Tile[,] tiles;
 
         // about preview
         public void SetPreviewSize(Vector2Int scale) => CreateGridLines(scale, Vector3.zero, PreviewGridVisualizer);
-        public void SetPreviewEnable(bool enabled) => PreviewGridVisualizer.SetActive(enabled);
+        public void SetPreviewEnable(bool enabled) => PreviewGridVisualizer.SetVisuality(enabled);
         public void SetPreviewColor(Color color) => PreviewGridVisualizer.SetColor(color);
         public void SetPreviewPosition(Vector3 position) => PreviewGridVisualizer.SetPosition(position);
 
-        public void SetMainGridEnable(bool enabled) => MainGridVisualizer.SetActive(enabled);
+        public void SetMainGridEnable(bool enabled) => MainGridVisualizer.SetVisuality(enabled);
 
         private void Awake()
         {
-            // set all of the tiles not placeable 
+            tiles = new Tile[TileScale.x, TileScale.y];
+            MainGridVisualizer.SetVisuality(false);
+            // set all of the tiles placeable 
             for (int x = 0; x < tiles.GetLength(0); ++x)
                 for (int y = 0; y < tiles.GetLength(1); ++y)
-                    tiles[x, y].isPlaceable = false;
+                    tiles[x, y].isPlaceable = true;
         }
 
         /// <param name="tileScale">width and height of cell ie 4x4</param>
@@ -90,6 +90,13 @@ namespace PanteonGames
                         return false;
             
             return true;
+        }
+
+        // visualize green if grid is walkable
+        /// <returns> soldier can run or not </returns>
+        public bool IsWalkable(Vector2Int arrayIndex)
+        {
+            return tiles[arrayIndex.x, arrayIndex.y].IsWalkable();
         }
 
         // remove from tile placeables

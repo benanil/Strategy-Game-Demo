@@ -5,7 +5,7 @@ namespace PanteonGames
     public struct Tile
     {
         public bool isPlaceable;
-        public bool IsWalkable() => !isPlaceable;
+        public bool IsWalkable() => isPlaceable;
     }
 
     [System.Serializable] // for visualizing this struct in inspector
@@ -13,7 +13,8 @@ namespace PanteonGames
     {
         public LineRenderer verticalLines;
         public LineRenderer horizontalLines;
-        public void SetActive(bool activity)
+        public Material material;
+        public void SetVisuality(bool activity)
         {
             verticalLines.enabled = activity;
             horizontalLines.enabled = activity;
@@ -21,8 +22,7 @@ namespace PanteonGames
 
         public void SetColor(in Color color)
         {
-            verticalLines  .startColor = color; verticalLines  .endColor = color;
-            horizontalLines.startColor = color; horizontalLines.endColor = color;
+            material.color = color;
         }
 
         internal void SetPosition(Vector3 position)
