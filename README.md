@@ -1,6 +1,7 @@
 # Strategy-Game-Demo
  for senior assignment
 
+TODO
 - [x]  world position to grid position snapping
 - [x]  create tile struct and make 2d array of it
 - [x]  control a tile point placeable or not
