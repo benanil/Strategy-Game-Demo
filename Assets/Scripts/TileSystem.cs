@@ -81,7 +81,7 @@ namespace PanteonGames
             worldToGrid.x *= gridToInt;
             worldToGrid.y *= gridToInt;
 
-            Vector2Int result = new Vector2Int(Mathf.FloorToInt(worldToGrid.x), Mathf.FloorToInt(worldToGrid.y));
+            Vector2Int result = new Vector2Int(Mathf.RoundToInt(worldToGrid.x), Mathf.RoundToInt(worldToGrid.y));
 
             return result;
         }
