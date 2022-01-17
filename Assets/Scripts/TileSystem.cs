@@ -117,8 +117,17 @@ namespace PanteonGames
             return tiles[arrayIndex.x, arrayIndex.y].IsWalkable();
         }
 
+        public bool IsIndexInRange(Vector2Int index)
+        {
+            return index.x > 0 && index.y > 0 && index.x < TileScale.y && index.y < TileScale.x;
+        }
+
         public void SetWlakable(Vector2Int index, Vector2Int size, bool value)
         {
+            if (!IsIndexInRange(index)) {
+                Debug.Log("walkable index is not in range");
+                return;
+            }
             for (int x = 0; x < size.x; ++x)
             {
                 for (int y = 0; y < size.x; ++y)

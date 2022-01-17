@@ -72,7 +72,7 @@ namespace PanteonGames
             GameManager.SetState(GameManagerState.movingSoldiers);
         }
 
-        private Vector2Int targetPathEndIndex;
+        private Vector2Int targetPathEndIndex = new Vector2Int(-1, -1);
         
         public void MoveToPoint(Vector2Int targetIndex)
         {
