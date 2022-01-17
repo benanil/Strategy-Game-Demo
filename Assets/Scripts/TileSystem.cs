@@ -1,6 +1,7 @@
 // this class helps visualizing grids
 // and we will manage tiles here
 
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -114,6 +115,33 @@ namespace PanteonGames
         public bool IsWalkable(Vector2Int arrayIndex)
         {
             return tiles[arrayIndex.x, arrayIndex.y].IsWalkable();
+        }
+
+        public void SetWlakable(Vector2Int index, Vector2Int size, bool value)
+        {
+            for (int x = 0; x < size.x; ++x)
+            {
+                for (int y = 0; y < size.x; ++y)
+                {
+                    tiles[index.x + x, index.y + y].isPlaceable = value;
+                }
+            }
+        }
+
+        /// <summary> get 1x1 neighbors </summary>
+        public List<Vector2Int> GetNeighbors(Vector2Int index)
+        {
+            List<Vector2Int> result = new List<Vector2Int>(8);
+
+            for (int x = -1; x < 2; ++x)
+            {
+                for (int y = -1; y < 2; ++y)
+                {
+                    if (x != 0 && y != 0) continue;
+                    result.Add(index + new Vector2Int(x, y));    
+                }
+            }
+            return result;
         }
 
         // mark as not placeable in tile array

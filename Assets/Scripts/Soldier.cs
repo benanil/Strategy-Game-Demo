@@ -71,12 +71,38 @@ namespace PanteonGames
             GameManager.SetState(GameManagerState.movingSoldiers);
         }
 
-        public void MoveToPoint(Vector2Int point)
+        private Vector2Int targetPathEndIndex;
+        
+        public void MoveToPoint(Vector2Int targetIndex)
         {
             State = SoldierState.walking;
 
             Vector2Int startGridPos = GetGridIndex();
-            List<Vector2Int> pathIndexes = PathfFinding.FindPath(TileSystem.GetTiles(), startGridPos, point);
+
+            // set old soldier position walkable true
+            TileSystem.instance.SetWlakable(startGridPos, Vector2Int.one, true);
+
+            List<Vector2Int> neighbors = TileSystem.instance.GetNeighbors(targetIndex);
+
+            // target point is not walkable 
+            if (TileSystem.IsWalkable(targetIndex) == false)
+            {
+                // find another tile index from neighbors
+                for (int i = 0; i < neighbors.Count; ++i)
+                {
+                    if (TileSystem.instance.IsWalkable(neighbors[i]))
+                    {
+                        targetIndex = neighbors[i];
+                        continue;
+                    }
+                }
+            }
+
+            List<Vector2Int> pathIndexes = PathfFinding.FindPath(TileSystem.GetTiles(), startGridPos, targetIndex);
+
+            targetPathEndIndex = pathIndexes[pathIndexes.Count - 1];
+            // since we are walking there we want to mark there as not walkable
+            TileSystem.instance.SetWlakable(pathIndexes[pathIndexes.Count - 1], Vector2Int.one, false); 
 
             worldPositions = new Vector3[pathIndexes.Count];
             worldPositions[0] = transform.position;
@@ -104,6 +130,8 @@ namespace PanteonGames
 
         private void Die()
         {
+            TileSystem.instance.SetWlakable(targetPathEndIndex, Vector2Int.one, true);
+            Destroy(gameObject);
             Debug.Log("soldier died!");
         }
 

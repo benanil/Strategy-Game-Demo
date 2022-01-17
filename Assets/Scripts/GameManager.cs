@@ -203,7 +203,7 @@ namespace PanteonGames
                     else
                     {
                         Vector3 averagePosition = default;
-                        // find center position of all soldiers
+                        // find center position of all soldiers (average pos)
                         for (int i = 0; i < SelectedSoldiers.Count; ++i) {
                             averagePosition += SelectedSoldiers[i].transform.position;
                         }
