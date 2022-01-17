@@ -129,19 +129,16 @@ namespace PanteonGames
         }
 
         /// <summary> get 1x1 neighbors </summary>
-        public List<Vector2Int> GetNeighbors(Vector2Int index)
+        public IEnumerable<Vector2Int> GetNeighbors(Vector2Int index)
         {
-            List<Vector2Int> result = new List<Vector2Int>(8);
-
             for (int x = -1; x < 2; ++x)
             {
                 for (int y = -1; y < 2; ++y)
                 {
                     if (x == 0 && y == 0) continue;
-                    result.Add(index + new Vector2Int(x, y));    
+                    yield return index + new Vector2Int(x, y);    
                 }
             }
-            return result;
         }
 
         // mark as not placeable in tile array

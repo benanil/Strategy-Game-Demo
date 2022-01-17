@@ -82,7 +82,7 @@ namespace PanteonGames
             // set old soldier position walkable true
             TileSystem.instance.SetWlakable(startGridPos, Vector2Int.one, true);
 
-            List<Vector2Int> neighbors = TileSystem.instance.GetNeighbors(targetIndex);
+            List<Vector2Int> neighbors = TileSystem.instance.GetNeighbors(targetIndex) as List<Vector2Int>;
 
             // target point is not walkable 
             if (TileSystem.IsWalkable(targetIndex) == false)
