@@ -54,6 +54,7 @@ namespace PanteonGames
                 // todo follow path
                 if (Vector3.Distance(transform.position, worldPositions[currentIndex]) < 0.05f)
                 {
+                    transform.position = worldPositions[currentIndex];
                     ++currentIndex;
                     if (currentIndex == worldPositions.Length)
                     {
@@ -80,7 +81,7 @@ namespace PanteonGames
             Vector2Int startGridPos = GetGridIndex();
 
             // set old soldier position walkable true
-            TileSystem.instance.SetWlakable(startGridPos, Vector2Int.one, true);
+            TileSystem.instance.SetWlakable(targetPathEndIndex, Vector2Int.one, true);
 
             List<Vector2Int> neighbors = TileSystem.instance.GetNeighbors(targetIndex) as List<Vector2Int>;
 

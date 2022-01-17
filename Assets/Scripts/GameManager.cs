@@ -36,7 +36,7 @@ namespace PanteonGames
 
         private List<Soldier> SelectedSoldiers = new List<Soldier>();
 
-        private List<Action> StateActions = new List<Action>();
+        private List<Action> StateMachineActions = new List<Action>();
 
         private float draggingTime = 0;
         private bool dragStarted;
@@ -56,10 +56,10 @@ namespace PanteonGames
 
             Application.targetFrameRate = 60;
 
-            // order is important
-            StateActions.Add(NoneState);
-            StateActions.Add(MovingBuildingState);
-            StateActions.Add(MovingSoldierState);
+            // order is important!
+            StateMachineActions.Add(NoneState);
+            StateMachineActions.Add(MovingBuildingState);
+            StateMachineActions.Add(MovingSoldierState);
 
             instance = this;
             BuildingsParent = new GameObject("Buildings Parent").transform;
@@ -70,7 +70,7 @@ namespace PanteonGames
 
         private void Update()
         {
-            StateActions[(int)State].Invoke();
+            StateMachineActions[(int)State].Invoke();
         }
 
         // STATE MACHINE STATES
@@ -228,7 +228,7 @@ namespace PanteonGames
                 Debug.Log("soldier maximum capacity!");
             }
         }
-
+        
         private void MoveBuildingInternal(Building building)
         {
             CurrentBuilding = building;
@@ -238,6 +238,7 @@ namespace PanteonGames
             SetState(GameManagerState.MovingBuilding);
         }
 
+        /// <summary> try sellect soldiers that in area </summary>
         private bool SoldiersSelected(in MinMaxSelectArea area)
         {
             SelectedSoldiers.Clear();
@@ -281,7 +282,7 @@ namespace PanteonGames
                 {
                     if (!tiles[x,y].IsWalkable())
                     {
-                        Gizmos.DrawWireSphere(new Vector3(x * 0.32f, y * 0.32f, 0), 0.05f);
+                        Gizmos.DrawWireSphere(new Vector3(x * 0.32f, y * 0.32f, 0), 0.1f);
                     }
                 }
             }
