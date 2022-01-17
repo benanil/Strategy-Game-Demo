@@ -102,7 +102,7 @@ namespace PanteonGames
 
             targetPathEndIndex = pathIndexes[pathIndexes.Count - 1];
             // since we are walking there we want to mark there as not walkable
-            TileSystem.instance.SetWlakable(pathIndexes[pathIndexes.Count - 1], Vector2Int.one, false); 
+            TileSystem.instance.SetWlakable(targetPathEndIndex, Vector2Int.one, false); 
 
             worldPositions = new Vector3[pathIndexes.Count];
             worldPositions[0] = transform.position;

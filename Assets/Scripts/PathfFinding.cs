@@ -7,8 +7,7 @@ namespace PanteonGames
 {
     public static class PathfFinding
     {
-
-        private static readonly Vector2Int invaildParentNode = new Vector2Int(-1, -1);
+        private static readonly int invaildParentNode = 1;
         
         public static List<Vector2Int> FindPath(Vector2Int startIndex, Vector2Int endIndex)
         {
@@ -25,8 +24,7 @@ namespace PanteonGames
                 for (int y = 0; y < TileSize.y; ++y)
                 {
                     tilePoints[x, y].hCost = Vector2Int.Distance(new Vector2Int(x, y), endIndex);
-                    tilePoints[x, y].parentTileIndex.x = -1;
-                    tilePoints[x, y].parentTileIndex.y = -1;
+                    tilePoints[x, y].parentTileIndex.x = invaildParentNode;
                     tilePoints[x, y].index.x = x;
                     tilePoints[x, y].index.y = y;
                     tilePoints[x, y].gCost = int.MaxValue;
@@ -53,37 +51,29 @@ namespace PanteonGames
                 openIndexes.Remove(currentNodeIndex);
                 closeIndexes.Add(currentNodeIndex);
 
-                // loop trough neighbour tiles
-                for (int x = -1; x < 2; ++x)
+                foreach (var neighborIndex in TileSystem.instance.GetNeighbors(currTilePoint.index))
                 {
-                    for (int y = -1; y < 2; ++y)
+                    if (!IsPositionInsideGrid(TileSize, neighborIndex)) continue;
+
+                    TilePoint neighborTile = tilePoints[neighborIndex.x, neighborIndex.y];
+
+                    if (closeIndexes.Contains(neighborIndex)) continue;
+
+                    if (!tile[neighborIndex.x, neighborIndex.y].IsWalkable()) continue;
+
+                    float tentativeGCost = currTilePoint.gCost + Vector2Int.Distance(currentNodeIndex, neighborIndex);
+
+                    if (tentativeGCost < neighborTile.gCost)
                     {
-                        if (x == 0 && y == 0) continue;
+                        tilePoints[neighborIndex.x, neighborIndex.y].parentTileIndex = currentNodeIndex;
+                        tilePoints[neighborIndex.x, neighborIndex.y].gCost = tentativeGCost;
 
-                        Vector2Int neighborIndex = currTilePoint.index + new Vector2Int(x, y);
-                        
-                        if (!IsPositionInsideGrid(TileSize, neighborIndex)) continue;
-
-                        TilePoint neighborTile = tilePoints[neighborIndex.x, neighborIndex.y];
-
-                        if (closeIndexes.Contains(neighborIndex)) continue;
-
-                        if (!tile[neighborIndex.x, neighborIndex.y].IsWalkable()) continue;
-
-                        float tentativeGCost = currTilePoint.gCost + Vector2Int.Distance(currentNodeIndex, neighborIndex);
-
-                        if (tentativeGCost < neighborTile.gCost)
+                        if (!openIndexes.Contains(neighborIndex))
                         {
-                            tilePoints[neighborIndex.x, neighborIndex.y].parentTileIndex = currentNodeIndex;
-                            tilePoints[neighborIndex.x, neighborIndex.y].gCost = tentativeGCost;
-
-                            if (!openIndexes.Contains(neighborIndex))
-                            {
-                                openIndexes.Add(neighborIndex);
-                            }
+                            openIndexes.Add(neighborIndex);
                         }
                     }
-                }
+                } 
             }
             
             TilePoint endTilePoint = tilePoints[endIndex.x, endIndex.y];
@@ -100,14 +90,14 @@ namespace PanteonGames
 
         private static List<Vector2Int> CalculateResultPath(TilePoint[,] tilePoints, TilePoint endTilePoint)
         {
-            if (endTilePoint.parentTileIndex == invaildParentNode) {
+            if (endTilePoint.parentTileIndex.x == invaildParentNode) {
                 Debug.LogError("path is not finded");
             }
 
             List<Vector2Int> result = new List<Vector2Int>();
 
             TilePoint currentTilePoint = endTilePoint;
-            while (currentTilePoint.parentTileIndex != invaildParentNode)
+            while (currentTilePoint.parentTileIndex.x != invaildParentNode)
             {
                 TilePoint parentTile = tilePoints[currentTilePoint.parentTileIndex.x, currentTilePoint.parentTileIndex.y];
                 result.Add(parentTile.index);

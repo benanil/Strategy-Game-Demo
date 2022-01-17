@@ -137,7 +137,7 @@ namespace PanteonGames
             {
                 for (int y = -1; y < 2; ++y)
                 {
-                    if (x != 0 && y != 0) continue;
+                    if (x == 0 && y == 0) continue;
                     result.Add(index + new Vector2Int(x, y));    
                 }
             }
