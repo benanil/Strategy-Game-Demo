@@ -1,5 +1,14 @@
 # Strategy-Game-Demo
  for senior assignment
+ 
+ I made this game in 2 day game is artisticly bad designed, I implemented almost all patterns that you require
+ has some bugs that can be fixed in one day but I think this is enough for senior asignment
+ 
+ ##Controls
+ - hold left mouse button chose building in buildings menu
+ - left click place building anywhere
+ - hold left click and drag for chosing multiple soldiers
+ - right click for move soldiers
 
 TODO
 - [x]  world position to grid position snapping
