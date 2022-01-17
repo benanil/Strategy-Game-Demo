@@ -1,5 +1,11 @@
 # Strategy-Game-Demo
  for senior assignment
+ 
+ ##Controls
+ - hold left mouse button chose building in buildings menu
+ - left click place building anywhere
+ - hold left click and drag for chosing multiple soldiers
+ - right click for move soldiers
 
 TODO
 - [x]  world position to grid position snapping
